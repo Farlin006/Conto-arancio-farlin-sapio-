@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revolut Clone - Scarica Ora</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0F0F0F 0%, #1C1C1E 100%);
+      color: #FFFFFF;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      background: #1C1C1E;
+      border-radius: 20px;
+      padding: 40px 24px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+      text-align: center;
+    }
+    .logo {
+      font-size: 60px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .subtitle {
+      font-size: 16px;
+      color: #8E8E93;
+      margin-bottom: 32px;
+    }
+    .features {
+      background: #2C2C2E;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 32px;
+      text-align: left;
+    }
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+    .feature:last-child {
+      margin-bottom: 0;
+    }
+    .btn {
+      background: linear-gradient(135deg, #0A84FF 0%, #0063CC 100%);
+      border: none;
+      color: white;
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 12px;
+      box-shadow: 0 8px 20px rgba(10, 132, 255, 0.3);
+    }
+    .btn:active {
+      transform: scale(0.98);
+    }
+    .btn-secondary {
+      background: #2C2C2E;
+      box-shadow: none;
+      color: #0A84FF;
+      border: 1px solid #3A3A3C;
+    }
+    .info {
+      font-size: 12px;
+      color: #8E8E93;
+      margin-top: 20px;
+    }
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2C2C2E;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      border: 1px solid #3A3A3C;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 1000;
+    }
+    .toast.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">💳</div>
+    <h1>Revolut Clone</h1>
+    <p class="subtitle">App bancaria con €17.000.000 di saldo</p>
+
+    <div class="features">
+      <div class="feature">💰 Saldo: €17.000.000</div>
+      <div class="feature">📤 Invia denaro</div>
+      <div class="feature">📥 Richiedi pagamenti</div>
+      <div class="feature">📊 Cronologia transazioni</div>
+      <div class="feature">💱 Crypto (Bitcoin, Ethereum, Ripple)</div>
+      <div class="feature">🎨 Dark mode elegante</div>
+      <div class="feature">📱 Funziona offline</div>
+    </div>
+
+    <button class="btn" onclick="downloadApp()">📥 SCARICA L'APP</button>
+    <button class="btn btn-secondary" onclick="openApp()">🌐 Usa Online</button>
+
+    <div class="info">
+      ℹ️ Scarica il file HTML e apri nel browser del tuo telefono.<br>
+      L'app funziona completamente offline! 📱
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const appCode = `<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revolut Clone</title>
+  <style>
+    :root {
+      --primary: #0A84FF;
+      --primary-dark: #0063CC;
+      --bg-dark: #0F0F0F;
+      --bg-secondary: #1C1C1E;
+      --bg-tertiary: #2C2C2E;
+      --text-primary: #FFFFFF;
+      --text-secondary: #8E8E93;
+      --border: #3A3A3C;
+      --success: #32D74B;
+      --danger: #FF453A;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      overflow: hidden;
+    }
+    .app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    .header {
+      background: var(--bg-secondary);
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding-bottom: 80px;
+    }
+    .balance-section {
+      padding: 24px 16px 16px;
+    }
+    .balance-card {
+      background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+      border-radius: 20px;
+      padding: 28px 24px;
+      color: white;
+    }
+    .balance-label {
+      font-size: 13px;
+      opacity: 0.9;
+      margin-bottom: 12px;
+    }
+    .balance-amount {
+      font-size: 44px;
+      font-weight: 700;
+    }
+    .actions-section {
+      padding: 20px 8px;
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .action-btn {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      width: calc(25% - 6px);
+      max-width: 100px;
+      padding: 12px 8px;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .action-icon {
+      font-size: 28px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .crypto-section, .transactions-section {
+      padding: 24px 16px;
+      border-top: 1px solid var(--border);
+    }
+    .section-header {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .crypto-list, .tx-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .crypto-item, .tx-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .crypto-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+    .crypto-icon.btc { background: linear-gradient(135deg, #F7931A 0%, #E67E22 100%); }
+    .crypto-icon.eth { background: linear-gradient(135deg, #627EEA 0%, #5568D3 100%); }
+    .crypto-icon.xrp { background: linear-gradient(135deg, #23292F 0%, #1A1F24 100%); }
+    .crypto-info {
+      flex: 1;
+    }
+    .crypto-name {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .crypto-symbol {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .crypto-price {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .crypto-change {
+      font-size: 13px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    .crypto-change.positive {
+      background: rgba(50, 215, 75, 0.1);
+      color: var(--success);
+    }
+    .crypto-change.negative {
+      background: rgba(255, 69, 58, 0.1);
+      color: var(--danger);
+    }
+    .tx-item {
+      justify-content: space-between;
+    }
+    .tx-icon {
+      font-size: 20px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .tx-icon.in { background: linear-gradient(135deg, var(--success) 0%, #10B981 100%); }
+    .tx-icon.out { background: linear-gradient(135deg, var(--danger) 0%, #DC2626 100%); }
+    .tx-info {
+      flex: 1;
+    }
+    .tx-name {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .tx-details {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .tx-amount {
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .tx-amount.in { color: var(--success); }
+    .tx-amount.out { color: var(--text-primary); }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      display: flex;
+      height: 70px;
+      z-index: 99;
+    }
+    .nav-item {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+      font-size: 11px;
+    }
+    .nav-item.active {
+      color: var(--primary);
+    }
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: flex-end;
+      z-index: 200;
+    }
+    .modal.hidden {
+      display: none;
+    }
+    .modal-content {
+      background: var(--bg-secondary);
+      width: 100%;
+      border-radius: 24px 24px 0 0;
+      padding: 0;
+      max-height: 90vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-header h2 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .close-modal {
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      font-size: 28px;
+      cursor: pointer;
+    }
+    .modal-body {
+      padding: 24px 16px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-secondary);
+    }
+    .form-input {
+      width: 100%;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-family: inherit;
+    }
+    .amount-input-wrapper {
+      position: relative;
+    }
+    .currency-symbol {
+      position: absolute;
+      left: 16px;
+      top: 14px;
+      color: var(--text-secondary);
+    }
+    .amount-input {
+      padding-left: 40px !important;
+    }
+    .btn-primary {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      border: none;
+      color: white;
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+    .toast {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      padding: 12px 20px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 999;
+    }
+    .toast.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="logo">Revolut</div>
+    </header>
+
+    <main class="main">
+      <section class="balance-section">
+        <div class="balance-card">
+          <div class="balance-label">Saldo Totale</div>
+          <div id="balanceAmount" class="balance-amount">€ 17.000.000,00</div>
+        </div>
+      </section>
+
+      <section class="actions-section">
+        <button class="action-btn" onclick="openModal('send')">
+          <div class="action-icon">📤</div>
+          <span>Invia</span>
+        </button>
+        <button class="action-btn" onclick="openModal('request')">
+          <div class="action-icon">📥</div>
+          <span>Richiedi</span>
+        </button>
+        <button class="action-btn">
+          <div class="action-icon">💳</div>
+          <span>Carte</span>
+        </button>
+        <button class="action-btn">
+          <div class="action-icon">⋯</div>
+          <span>Altro</span>
+        </button>
+      </section>
+
+      <section class="crypto-section">
+        <div class="section-header">Crypto</div>
+        <div class="crypto-list">
+          <div class="crypto-item">
+            <div class="crypto-icon btc">₿</div>
+            <div class="crypto-info">
+              <div class="crypto-name">Bitcoin</div>
+              <div class="crypto-symbol">BTC</div>
+            </div>
+            <div class="crypto-price">€ 45.230,00</div>
+            <div class="crypto-change positive">+12,5%</div>
+          </div>
+          <div class="crypto-item">
+            <div class="crypto-icon eth">Ξ</div>
+            <div class="crypto-info">
+              <div class="crypto-name">Ethereum</div>
+              <div class="crypto-symbol">ETH</div>
+            </div>
+            <div class="crypto-price">€ 2.430,00</div>
+            <div class="crypto-change positive">+8,2%</div>
+          </div>
+          <div class="crypto-item">
+            <div class="crypto-icon xrp">✕</div>
+            <div class="crypto-info">
+              <div class="crypto-name">Ripple</div>
+              <div class="crypto-symbol">XRP</div>
+            </div>
+            <div class="crypto-price">€ 2,45</div>
+            <div class="crypto-change negative">-3,1%</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="transactions-section">
+        <div class="section-header">Transazioni Recenti</div>
+        <div id="txContainer" class="tx-container"></div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <button class="nav-item active">Home</button>
+      <button class="nav-item">Cambi</button>
+      <button class="nav-item">Carte</button>
+      <button class="nav-item">Account</button>
+    </nav>
+
+    <div id="sendModal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Invia Denaro</h2>
+          <button class="close-modal" onclick="closeModal('send'">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Destinatario</label>
+            <input type="text" id="recipientInput" placeholder="Nome" class="form-input">
+          </div>
+          <div class="form-group">
+            <label>Importo</label>
+            <div class="amount-input-wrapper">
+              <span class="currency-symbol">€</span>
+              <input type="number" id="amountInput" placeholder="0,00" class="form-input amount-input" step="0.01">
+            </div>
+          </div>
+          <button class="btn-primary" onclick="handleSend()">Invia</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="requestModal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Richiedi Denaro</h2>
+          <button class="close-modal" onclick="closeModal('request'">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Da chi</label>
+            <input type="text" id="requesterInput" placeholder="Nome" class="form-input">
+          </div>
+          <div class="form-group">
+            <label>Importo</label>
+            <div class="amount-input-wrapper">
+              <span class="currency-symbol">€</span>
+              <input type="number" id="requestAmountInput" placeholder="0,00" class="form-input amount-input" step="0.01">
+            </div>
+          </div>
+          <button class="btn-primary" onclick="handleRequest()">Richiedi</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+  </div>
+
+  <script>
+    const locale = 'it-IT';
+    const numberFormatter = new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency: 'EUR',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+
+    const dateFormatter = new Intl.DateTimeFormat(locale, {
+      hour: '2-digit',
+      minute: '2-digit',
+      day: 'numeric',
+      month: 'short'
+    });
+
+    let appState = {
+      balance: 17000000.00,
+      transactions: [
+        { id: '1', name: 'Stipendio Mensile', details: 'Azienda XYZ', amount: 5000, type: 'in', date: new Date(Date.now() - 86400000 * 3), icon: '💼' },
+        { id: '2', name: 'Amazon', details: 'Acquisto Online', amount: -129.99, type: 'out', date: new Date(Date.now() - 86400000 * 2), icon: '📦' },
+        { id: '3', name: 'Trasferimento a Marco', details: 'Bonifico P2P', amount: -250.00, type: 'out', date: new Date(Date.now() - 86400000 * 1), icon: '👤' },
+        { id: '4', name: 'Netflix', details: 'Abbonamento', amount: -15.99, type: 'out', date: new Date(Date.now() - 3600000 * 5), icon: '🎬' },
+        { id: '5', name: 'Starbucks', details: 'Pagamento', amount: -6.50, type: 'out', date: new Date(Date.now() - 3600000 * 2), icon: '☕' }
+      ]
+    };
+
+    function openModal(type) {
+      if (type === 'send') {
+        document.getElementById('sendModal').classList.remove('hidden');
+        document.getElementById('recipientInput').focus();
+      } else {
+        document.getElementById('requestModal').classList.remove('hidden');
+        document.getElementById('requesterInput').focus();
+      }
+    }
+
+    function closeModal(type) {
+      if (type === 'send') {
+        document.getElementById('sendModal').classList.add('hidden');
+      } else {
+        document.getElementById('requestModal').classList.add('hidden');
+      }
+    }
+
+    function renderTransactions() {
+      const txContainer = document.getElementById('txContainer');
+      txContainer.innerHTML = '';
+      const sorted = [...appState.transactions].sort((a, b) => b.date - a.date);
+      sorted.forEach(tx => {
+        const txItem = document.createElement('div');
+        txItem.className = 'tx-item';
+        const amountPrefix = tx.type === 'in' ? '+' : '';
+        txItem.innerHTML = \`
+          <div class="tx-icon \${tx.type}">\${tx.icon}</div>
+          <div class="tx-info">
+            <div class="tx-name">\${tx.name}</div>
+            <div class="tx-details">\${tx.details} • \${dateFormatter.format(tx.date)}</div>
+          </div>
+          <div class="tx-amount \${tx.type}">\${amountPrefix}\${numberFormatter.format(Math.abs(tx.amount))}</div>
+        \`;
+        txContainer.appendChild(txItem);
+      });
+    }
+
+    function handleSend() {
+      const recipient = document.getElementById('recipientInput').value.trim();
+      const amountStr = document.getElementById('amountInput').value.trim();
+      
+      if (!recipient || !amountStr || parseFloat(amountStr) <= 0) {
+        showToast('Dati non validi');
+        return;
+      }
+      
+      const amount = parseFloat(amountStr);
+      if (amount > appState.balance) {
+        showToast('Saldo insufficiente');
+        return;
+      }
+      
+      appState.transactions.unshift({
+        id: Date.now().toString(),
+        name: \`Pagamento a \${recipient}\`,
+        details: 'Trasferimento',
+        amount: -amount,
+        type: 'out',
+        date: new Date(),
+        icon: '👤'
+      });
+      appState.balance -= amount;
+      
+      document.getElementById('recipientInput').value = '';
+      document.getElementById('amountInput').value = '';
+      closeModal('send');
+      
+      renderTransactions();
+      showToast(\`✓ Inviati \${numberFormatter.format(amount)}\`);
+    }
+
+    function handleRequest() {
+      const requester = document.getElementById('requesterInput').value.trim();
+      const amountStr = document.getElementById('requestAmountInput').value.trim();
+      
+      if (!requester || !amountStr || parseFloat(amountStr) <= 0) {
+        showToast('Dati non validi');
+        return;
+      }
+      
+      const amount = parseFloat(amountStr);
+      appState.transactions.unshift({
+        id: Date.now().toString(),
+        name: \`Richiesta da \${requester}\`,
+        details: 'In sospeso',
+        amount
